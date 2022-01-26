@@ -24,3 +24,6 @@ bin/
 include/
 lib/
 share/
+
+# VIM files
+*.swp
