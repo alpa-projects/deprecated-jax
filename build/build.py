@@ -217,7 +217,7 @@ def write_bazelrc(python_bin_path=None, remote_build=None,
                   cuda_toolkit_path=None, cudnn_install_path=None,
                   cuda_version=None, cudnn_version=None, rocm_toolkit_path=None,
                   cpu=None, cuda_compute_capabilities=None,
-                  rocm_amdgpu_targets=None):
+                  rocm_amdgpu_targets=None, tf_path=None):
   tf_cuda_paths = []
 
   with open("../.jax_configure.bazelrc", "w") as f:
@@ -262,7 +262,9 @@ def write_bazelrc(python_bin_path=None, remote_build=None,
       f.write(f"build --cpu={cpu}\n")
     else:
       f.write("build --distinct_host_configuration=false\n")
-
+    if tf_path:
+      f.write("build --action_env TF_PATH=\"{tf_path}\"\n"
+              .format(tf_path=tf_path))
 
 BANNER = r"""
      _   _  __  __
@@ -406,6 +408,14 @@ def main():
       default=None,
       help="CPU platform to target. Default is the same as the host machine. "
            "Currently supported values are 'darwin_arm64' and 'darwin_x86_64'.")
+  parser.add_argument(
+      "--tf_path",
+      required=True,
+      help="The path to tensorflow repo")
+  parser.add_argument(
+      "--dev_install",
+      action="store_true",
+      help="Do not build wheel. Use dev install")
   args = parser.parse_args()
 
   if is_windows() and args.enable_cuda:
@@ -485,6 +495,7 @@ def main():
       cpu=args.target_cpu,
       cuda_compute_capabilities=args.cuda_compute_capabilities,
       rocm_amdgpu_targets=args.rocm_amdgpu_targets,
+      tf_path=args.tf_path
   )
 
   print("\nBuilding XLA and installing it in the jaxlib source tree...")
@@ -518,6 +529,8 @@ def main():
     [":build_wheel", "--",
     f"--output_path={output_path}",
     f"--cpu={wheel_cpu}"])
+  if args.dev_install:
+    command += ["--dev_install"]
   print(" ".join(command))
   shell(command)
   shell([bazel_path, "shutdown"])

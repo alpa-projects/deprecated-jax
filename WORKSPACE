@@ -17,20 +17,24 @@ http_archive(
 # b) get the sha256 hash of the commit by running:
 #    curl -L https://github.com/tensorflow/tensorflow/archive/<git hash>.tar.gz | sha256sum
 #    and update the sha256 with the result.
-http_archive(
-    name = "org_tensorflow",
-    sha256 = "a491d6c2fac467956809d100fdeaeaada35103c724acebba1168f7cfd47f1209",
-    strip_prefix = "tensorflow-0d5668cbdc6b46d099bd3abd93374c09b2e8121f",
-    urls = [
-        "https://github.com/tensorflow/tensorflow/archive/0d5668cbdc6b46d099bd3abd93374c09b2e8121f.tar.gz",
-    ],
-)
+#http_archive(
+#    name = "org_tensorflow",
+#    sha256 = "a491d6c2fac467956809d100fdeaeaada35103c724acebba1168f7cfd47f1209",
+#    strip_prefix = "tensorflow-0d5668cbdc6b46d099bd3abd93374c09b2e8121f",
+#    urls = [
+#        "https://github.com/tensorflow/tensorflow/archive/0d5668cbdc6b46d099bd3abd93374c09b2e8121f.tar.gz",
+#    ],
+#)
 
 # For development, one can use a local TF repository instead.
 # local_repository(
 #    name = "org_tensorflow",
 #    path = "tensorflow",
 # )
+
+# Load the path of tensorflow from environment variable TF_PATH
+load("//build:load_tensorflow_from_env.bzl", "load_tensorflow_from_env")
+load_tensorflow_from_env(name="org_tensorflow")
 
 load("//third_party/pocketfft:workspace.bzl", pocketfft = "repo")
 pocketfft()
