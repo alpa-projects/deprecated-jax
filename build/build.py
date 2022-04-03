@@ -263,8 +263,12 @@ def write_bazelrc(python_bin_path=None, remote_build=None,
     else:
       f.write("build --distinct_host_configuration=false\n")
     if tf_path:
-      f.write("build --action_env TF_PATH=\"{tf_path}\"\n"
-              .format(tf_path=tf_path))
+      f.write(f'build --action_env TF_PATH="{tf_path}"\n')
+      from cupy.cuda import nccl
+      nccl_version = str(nccl.get_version())
+      nccl_version = f"{nccl_version[0]}.{nccl_version[1:-2]}.{int(nccl_version[-2:])}"
+      f.write(f'build --action_env TF_NCCL_VERSION="{nccl_version}"\n')
+
 
 BANNER = r"""
      _   _  __  __
