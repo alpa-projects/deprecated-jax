@@ -266,7 +266,7 @@ def write_bazelrc(python_bin_path=None, remote_build=None,
       f.write(f'build --action_env TF_PATH="{tf_path}"\n')
       from cupy.cuda import nccl
       nccl_version = str(nccl.get_version())
-      nccl_version = f"{nccl_version[0]}.{nccl_version[1:-2]}.{int(nccl_version[-2:])}"
+      nccl_version = f"{nccl_version[0]}.{int(nccl_version[1:-2])}.{int(nccl_version[-2:])}"
       f.write(f'build --action_env TF_NCCL_VERSION="{nccl_version}"\n')
 
 
