@@ -198,6 +198,8 @@ from jax._src.lax.lax import (
   rng_bit_generator_p as rng_bit_generator_p,
   rng_uniform as rng_uniform,
   rng_uniform_p as rng_uniform_p,
+  rng_normal as rng_normal,
+  rng_normal_p as rng_normal_p,
   round as round,
   round_p as round_p,
   rsqrt as rsqrt,
