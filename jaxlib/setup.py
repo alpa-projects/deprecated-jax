@@ -26,7 +26,7 @@ if cuda_version and cudnn_version:
   __version__ += f"+cuda{cuda_version.replace('.', '')}-cudnn{cudnn_version.replace('.', '')}"
 
 setup(
-    name='jaxlib',
+    name='jaxlib-alpa',
     version=__version__,
     description='XLA library for JAX',
     author='JAX team',
