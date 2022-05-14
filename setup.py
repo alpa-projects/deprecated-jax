@@ -17,11 +17,14 @@ from setuptools import setup, find_packages
 _current_jaxlib_version = '0.3.5'
 # The following should be updated with each new jaxlib release.
 _latest_jaxlib_version_on_pypi = '0.3.2'
-_available_cuda_versions = ['11']
-_default_cuda_version = '11'
-_available_cudnn_versions = ['82', '805']
-_default_cudnn_version = '82'
+_available_cuda_versions = ['110', '111', '112']
+_default_cuda_version = '111'
+_available_cudnn_versions = ['810', '805']
+_default_cudnn_version = '805'
 _libtpu_version = '0.1.dev20220407'
+
+supported_cuda_cudnn_combo = [("110", "805"), ("111", "805"), ("112", "810")]
+
 
 _dct = {}
 with open('jax/version.py') as f:
@@ -71,8 +74,10 @@ setup(
         # CUDA installations require adding jax releases URL; e.g.
         # $ pip install jax[cuda11_cudnn82] -f https://storage.googleapis.com/jax-releases/jax_releases.html
         # $ pip install jax[cuda11_cudnn805] -f https://storage.googleapis.com/jax-releases/jax_releases.html
+        #**{f'cuda{cuda_version}_cudnn{cudnn_version}': f"jaxlib=={_current_jaxlib_version}+cuda{cuda_version}.cudnn{cudnn_version}"
+        #   for cuda_version in _available_cuda_versions for cudnn_version in _available_cudnn_versions}
         **{f'cuda{cuda_version}_cudnn{cudnn_version}': f"jaxlib=={_current_jaxlib_version}+cuda{cuda_version}.cudnn{cudnn_version}"
-           for cuda_version in _available_cuda_versions for cudnn_version in _available_cudnn_versions}
+           for cuda_version, cudnn_version in supported_cuda_cudnn_combo}
     },
     url='https://github.com/google/jax',
     license='Apache-2.0',
